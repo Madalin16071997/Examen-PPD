@@ -28,3 +28,7 @@ IN OMP(3) SE GASESTE !!!!
 Implementați un program ce calculează produsul a 2 matrici
 cu N linii și N coloane iar apoi paralelizați programul utilizand
 OpenMP
+
+
+GIT-UL LUI SIMION :sgeorgealex
+GIT_UL LUI VLAD : vladulmeteanu
