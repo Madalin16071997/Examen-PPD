@@ -1,0 +1,141 @@
+#include "cuda_runtime.h"
+#include "device_launch_parameters.h"
+#include <iostream>
+#include <vector>
+/* --------------------------------------------------------------------
+Se da o matrice ce contine N puncte 3-dimesionale (deci o matrice cu
+N linii si 3 coloane). Implementati un program CUDA ce calculeaza distanta
+intre un punct 3-dimensional p0 dat si fiecare din cele N puncte din matrice.
+Urmati, pe rand, pasii de mai jos.
+--------------------------------------------------------------------*/
+__global__ void compute_distance(float *p, float p0_x, float p0_y, float p0_z, float *distante, int N
+);
+int main()
+{
+    // Numarul N de puncte
+    int N = 1000;
+    // Matricea ce contine punctele
+    float *p_h;
+    // punctul p0
+    float p0_x = 0;
+    float p0_y = 0;
+    float p0_z = 0;
+    // Distantele intre p0 si fiecare p_i
+    float *distante_h;
+    /* --------------------------------------------------------------------
+    1. Alocati memorie pe host pentru matricea p_h si vectorul distante_h
+    dupa cum urmeaza:
+    * Matricea este de N linii si 3 coloane si este alocata ca un singur
+    bloc de memorie (o singura alocare de N*3 elemente)
+    * Vectorul ce contine distantele are N elemente
+    0.7142 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 1 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    p_h = (float*)malloc(N * 3 * sizeof(float));
+    distante_h = (float*)malloc(N * sizeof(float));
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    /* --------------------------------------------------------------------
+    2. Initializati matricea ce contine punctele dupa cum urmeaza:
+    * Primul punct (adica prima linie din matrice) are coordonatele 0,0,0,
+    al 2-lea punct are 1,1,1, al 3-lea 2,2,2, etc
+    0.7142 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 2 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    for (int i = 0; i < N; i++) 
+    {
+        p_h[i*3] = i;
+        p_h[i*3+1] = i;
+        p_h[i*3+2] = i;
+    }
+    //verificare, nu face parte din rezolvare
+    for (int i = 0; i < 10; i++) 
+    {
+            std::cout << p_h[i * 3] << " " << p_h[i * 3 + 1] << " " << p_h[i * 3 + 2] << std::endl; 
+    }
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    // Matricea si cei doi vectori pentru memoria device
+    float *p_d;
+    float *distante_d;
+    /* --------------------------------------------------------------------
+    3. Alocati memorie pe device pentru matrice si vectorul ce contine distantele
+    0.7142 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 3 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    cudaMalloc((void**)&p_d, N * 3 * sizeof(float));
+    cudaMalloc((void**)&distante_d, N * sizeof(float));
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    /* --------------------------------------------------------------------
+    4. Copiati continutul matricei si vectorului b de pe host pe device
+    0.7142 puncte
+
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 4 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    cudaMemcpy(p_d, p_h, N * 3 * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(distante_d, distante_h, N * sizeof(float), cudaMemcpyHostToDevice);
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    // Numarul de thread-uri pe bloc
+    dim3 threadsPerBlock;
+    threadsPerBlock.x = 128;
+    threadsPerBlock.y = 1;
+    threadsPerBlock.z = 1;
+    // Numarul de blocuri
+    dim3 numBlocks;
+    /* --------------------------------------------------------------------
+    5. Calculati numarul de blocuri astfel incat:
+    * se obtine un grid 1D de thread-uri
+    * Numarul de thread-uri lansate in executie exte mai mare sau egal cu N
+    0.7142 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 5 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    numBlocks.x = N / threadsPerBlock.x;
+    numBlocks.y = 1;
+    numBlocks.z = 1;
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    // Se lanseaza in executie kernel-ul cuda
+    compute_distance << <numBlocks, threadsPerBlock >> > (p_d, p0_x, p0_y, p0_z, distante_d, N);
+    /* --------------------------------------------------------------------
+    6. Copiati continutul vectorului ce contine distantele calculate de pe device pe host
+    0.7142 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 6 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    cudaMemcpy(distante_h, distante_d, N * sizeof(float), cudaMemcpyDeviceToHost);
+    for (int i = 0; i < 10; i++)
+    {
+        std::cout << distante_h[i] << std::endl;
+    }
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    return 0;
+}
+__global__ void compute_distance(float *p, float p0_x, float p0_y, float p0_z, float *distances, int
+    N)
+{
+    // Indicele fiecarui thread
+    int index;
+    /* --------------------------------------------------------------------
+    7. Calculati valoarea indicelui utilizand variabilele predefinite blockDim
+    blocIdx si threadIdx astfel incat: thread-ul zero are index 0, thread-ul 1
+    are indicele 1, thread-ul 2 are indicele 2, etc.
+    0.7142 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 7 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    index = blockDim.x*blockIdx.x + threadIdx.x;
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    /* --------------------------------------------------------------------
+    8. Calculti distanta intre punctul p0 si fiecare punct din matricea p0
+    2 puncte
+    ----------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 8 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    float pi_x = p[index * 3];
+    float pi_y = p[index * 3 + 1];
+    float pi_z = p[index * 3 + 2];
+    distances[index] = sqrt(pow(pi_x - p0_x, 2) + pow(pi_y - p0_y, 2) + pow(pi_z - p0_z, 2));
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+}
