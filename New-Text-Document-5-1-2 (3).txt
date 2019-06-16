@@ -1,0 +1,86 @@
+#include <iostream>
+#include <omp.h>
+/* --------------------------------------------------------------------
+Implementa?i un program ce calculeaza suma elementelor de pe diagonala
+principala a unei matrici cu N linii ?i N coloane iar apoi paraleliza?i
+programul utilizandOpenMP
+Urmati, pe rand, pasii de mai jos.
+--------------------------------------------------------------------*/
+int main()
+{
+    // Numarul N de linii/coloane
+    int N = 1000;
+    //Matricea
+    int *a;
+    //Summa elementelor de pe diagonala principala
+    int sum;
+    /* --------------------------------------------------------------------
+    1. Aloca?i memorie pentru matrice: matricea are N linii si N coloane
+    deci NxN elemente iar acestea vor fi alocate intr-un singur bloc de
+    memorie (o singura alocare de NxN elemente)
+    0.333 puncte
+    --------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 1 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    a = (int*)malloc(N*N * sizeof(int));
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+
+    /* --------------------------------------------------------------------
+    2. Initializa?i matricea dupa cum urmeaza: elementele de pe prima linie
+    au valoarea 1, elementele de pe a 2-a linie au valoarea 2, cele de pe a
+    3-a au valoarea 3, etc
+    0.333 puncte
+    --------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 2 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    for (int i = 0; i < N; i++) 
+    {
+        for (int j = 0; j < N; j++)
+        {
+            a[i*N + j] = j + 1;
+        }
+    }
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+
+    /* --------------------------------------------------------------------
+    3. Implementa?i algoritmul de calcul a sumei elementelor de pe diagonala principala
+    0.333 puncte
+    --------------------------------------------------------------------*/
+    /* ------------------------ REZOLVARE PCT 3 -----------------------------*/
+
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    sum = 0;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            if (i == j) 
+            {
+                sum += a[i*N + j];
+            }
+        }
+    }
+    std::cout << sum << std::endl;
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+    /* --------------------------------------------------------------------
+    4. Implementa?i varianta paralela a calculului de la cerinta precedenta
+
+    1 punct
+    --------------------------------------------------------------------* /
+    /* ------------------------ REZOLVARE PCT 4 -----------------------------*/
+    /* ------------------------ CODUL TAU DE AICI ---------------------------*/
+    sum = 0;
+#pragma omp parallel for reduction(+:sum)
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            if (i == j)
+            {
+                sum += a[i*N + j];
+            }
+        }
+    }
+    std::cout << sum << std::endl;
+    /* ------------------------ CODUL TAU PANA AICI ---------------------------*/
+}
