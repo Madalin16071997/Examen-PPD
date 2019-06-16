@@ -1,0 +1,34 @@
+#include <iostream>
+
+using namespace std;
+
+// try.cpp : This file contains the 'main' function. Program execution begins and ends there.
+#include <stdio.h>
+#define N 4
+
+int main()
+{
+	//matricea de inmultit
+	double *A = new double[N*N];
+
+	//parcurgerea si initializarea matricei
+	for (int i = 0; i < N; i++)//linii
+		for (int j = 0; j < N; j++)//coloane
+		{
+			if (i == j)
+			{
+				A[i *N + j] = 6;
+			}
+			else
+			A[i*N + j] = 2;
+		}
+	for (int i = 0; i < N; i++)
+    {
+		for (int j = 0; j < N; j++)
+
+            {
+			cout<<A[i*N + j]<<" ";
+            }
+            cout<<endl;
+    }
+}

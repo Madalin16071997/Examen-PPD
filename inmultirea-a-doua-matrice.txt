@@ -1,0 +1,90 @@
+#include <iostream>
+
+using namespace std;
+#define N 4
+int main()
+{
+    double *A = new double[N*N];
+    double *B = new double[N*N];
+    double *C = new double[N*N];
+
+    //initializez matricea A cu valori de 0 si 1 pe diagonala
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            if(i == j)
+            {
+                A[i*N + j] = 1;
+            }
+            else
+            A[i*N + j] = 2;
+        }
+    }
+    //afisez matricea A
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            cout<<A[i*N + j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    //initializez matricea B cu valori de 2 si 0 pe diagonala
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            if(i == j)
+            {
+                B[i*N + j] = 3;
+            }
+            else
+                B[i*N + j] = 2;
+        }
+    }
+    //afisez matricea B
+    cout<<endl;
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            cout<<B[i*N + j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    //initializez matricea C cu valori de 0
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            C[i*N + j] = 0;
+        }
+    }
+    //Calculez produsul matricilor pe care il voi pastra in matricea C
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            int sum = 0;
+            for(int k = 0; k < N; k++)
+            {
+            sum +=  A[i*N + k] * B[k*N + j];
+            }
+        C[i*N + j] = sum;
+        }
+    }
+    //afisez matricea rezultat
+    cout<<endl;
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            cout<<C[i*N + j]<<" ";
+        }
+        cout<<endl;
+    }
+    return 0;
+}
