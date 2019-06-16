@@ -9,3 +9,10 @@ IN 4-2 SE GASESTE !!!!
 Se dau doua matrici cu N linii ?i 3 coloane ce reprezinta doua multimi
 de cate N puncte 3-dimensionale. Implementati un program CUDA ce calculeaza
 distanta intre punctele din cele doua matrici.
+
+IN 5-2 SE GASESTE !!! 
+
+
+Implementa?i un program ce calculeaza suma elementelor de pe diagonala
+principala a unei matrici cu N linii ?i N coloane iar apoi paraleliza?i
+programul utilizandOpenMP
